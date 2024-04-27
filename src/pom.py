@@ -60,16 +60,25 @@ class MainPage:
         return list_of_food
 
     def search_city_into_modal_input(self, text):
-        button = self.driver.find_elements(by=By.CSS_SELECTOR, value="span.button-content")[0]
+        button = self.driver.find_element(by=By.CSS_SELECTOR, value=".nav-bg button")
         ActionChains(self.driver).click(button).perform()
-        # self.driver.find_elements(by=By.CSS_SELECTOR, value="div.gr-modal.open")[0]
         input_search = self.driver.find_element(by=By.NAME, value="search-city")
         input_search.send_keys(text)
-    
         return self.driver.find_elements(by=By.CSS_SELECTOR, value=".select-city-modal-item")
-
+    
     def open_modal_window_with_cities(self):
-        button = self.driver.find_elements(by=By.CSS_SELECTOR, value="span.button-content")[0]
+        button = self.driver.find_element(by=By.CSS_SELECTOR, value=".nav-bg button")
         self.driver.execute_script("arguments[0].click();", button)
-        modal = self.driver.find_elements(by=By.CSS_SELECTOR, value="div.gr-modal")[0]
+        modal = self.driver.find_element(by=By.CSS_SELECTOR, value="div.gr-modal-content")
         return 'open' in modal.get_attribute('class').split(' ')
+
+    def add_item_to_basket(self):
+        chapter = self.driver.find_element(by=By.CSS_SELECTOR, value="a.catalog-list-item")
+        self.driver.execute_script("arguments[0].click();", chapter)
+        button = self.driver.find_element(by = By.CSS_SELECTOR, value=".product-list-item span.button-content")
+        time.sleep(3)
+        ActionChains(self.driver).click(button).perform()
+        button = self.driver.find_element(by = By.CSS_SELECTOR, value=".basket-btn-desk span.button-content")
+        time.sleep(3)
+        ActionChains(self.driver).click(button).perform()
+        return self.driver.find_elements(by=By.CSS_SELECTOR, value=".basket-preview-general .basket-preview-item")
